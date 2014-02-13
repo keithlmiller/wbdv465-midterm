@@ -1,4 +1,8 @@
 Wbdv465Midterm::Application.routes.draw do
+  resources :lists
+
+  resources :user_books
+
   resources :books
 
   resources :sessions,   only: [:create]

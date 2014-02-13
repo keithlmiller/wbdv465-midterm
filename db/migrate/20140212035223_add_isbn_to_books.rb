@@ -1,5 +1,5 @@
 class AddIsbnToBooks < ActiveRecord::Migration
   def change
-    add_column_ :books, :ISBN, :string
+    add_column :books, :ISBN, :string
   end
 end

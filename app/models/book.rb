@@ -4,4 +4,7 @@ class Book < ActiveRecord::Base
   validates :summary, presence: true
   validates :ISBN, length: {is: 10}
   
+  has_many :user_books
+  has_many :books, through: :user_books
+  
 end
