@@ -14,6 +14,9 @@ Wbdv465Midterm::Application.routes.draw do
   get     "signup"       => "users#new",        as: "signup"
   get     "signin"       => "sessions#new",     as: "signin"
   delete  "signout"      => "sessions#destroy", as: "signout"
+  
+  get 'tags/:tag' => 'books#index', :as => 'tag'
+
 
   root "books#index"
 end

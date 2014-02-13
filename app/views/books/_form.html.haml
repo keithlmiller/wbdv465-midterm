@@ -9,17 +9,23 @@
               %li= msg
 
       .field
-        = f.label :title
+        = f.label  :title
         = f.text_field :title, class: "form-control"
       .field
-        = f.label :author
+        = f.label  :author
         = f.text_field :author, class: "form-control"
       .field
-        = f.label :page_count
+        = f.label  :page_count
         = f.number_field :page_count, class: "form-control"
       .field
-        = f.label :summary
+        = f.label  :summary
         = f.text_area :summary, class: "form-control"
+      .field
+        = f.label  :ISBN
+        = f.text_field :ISBN, class: "form-control"
+      .field
+        = f.label  :tags
+        = f.text_field :tag_list, class: "form-control"
       .actions
         = f.submit 'Save', class: "btn btn-primary"
         = link_to 'Back', root_path, class: "btn btn-link"
