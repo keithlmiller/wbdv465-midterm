@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   has_secure_password
   
-  has_many :user_books
-  has_many :users, through: :user_books
+  has_many :lists
+  has_many :books
 
   ROLES = ["admin", "member"]
 

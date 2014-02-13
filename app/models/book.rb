@@ -5,6 +5,6 @@ class Book < ActiveRecord::Base
   validates :ISBN, length: {is: 10}
   
   has_many :user_books
-  has_many :books, through: :user_books
+  has_many :lists, through: :user_books
   
 end

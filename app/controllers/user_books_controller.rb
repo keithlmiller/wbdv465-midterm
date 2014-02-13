@@ -1,10 +1,13 @@
 class UserBooksController < ApplicationController 
+  before_action :authorize_user!
+  before_action :set_list
+  before_action :set_user
   before_action :set_user_book, only: [:destroy]
 
   # GET /user_books
   # GET /user_books.json
   def index
-    @user_books = UserBook.all
+    @books = @list.books
   end
 
   # GET /user_books/1
@@ -14,7 +17,7 @@ class UserBooksController < ApplicationController
 
   # GET /user_books/new
   def new
-    @user_book = UserBook.new
+    @books = @list.books
   end
 
   # GET /user_books/1/edit
@@ -24,16 +27,10 @@ class UserBooksController < ApplicationController
   # POST /user_books
   # POST /user_books.json
   def create
-    @user_book = UserBook.new(user_book_params)
-
-    respond_to do |format|
-      if @user_book.save
-        format.html { redirect_to @user_book, notice: 'User book was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @user_book }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @user_book.errors, status: :unprocessable_entity }
-      end
+    if @list.update(user_book_params)
+      redirect_to user_list_path(@list.user, @list)
+    else
+      render :new
     end
   end
 
@@ -63,12 +60,24 @@ class UserBooksController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_user_book
-      @user_book = UserBook.find(params[:id])
+    def set_list
+      @list = List.find(params[:id])
     end
+  
+  def set_user_book
+    @user_book = UserBook.find_by(list_id: params[:list_id], book_id: params[:id])
+  end
+  
+  def set_user
+    @user = @list.user
+  end
+  
+  def set_books
+    @list.books = Book.all
+  end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_book_params
-      params[:user_book]
+      params.require(:list).permit(book_ids:[])
     end
 end

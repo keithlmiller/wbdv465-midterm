@@ -1,10 +1,12 @@
-class ListsController < ApplicationController
+class Users::ListsController < ApplicationController
+  before_action :authorize_user!, except: [:index, :show]
+  before_action :set_user
   before_action :set_list, only: [:show, :edit, :update, :destroy]
 
   # GET /lists
   # GET /lists.json
   def index
-    @lists = List.all
+    @lists = @user.lists
   end
 
   # GET /lists/1
@@ -14,7 +16,7 @@ class ListsController < ApplicationController
 
   # GET /lists/new
   def new
-    @list = List.new
+    @list = @user.lists.new
   end
 
   # GET /lists/1/edit
@@ -24,11 +26,11 @@ class ListsController < ApplicationController
   # POST /lists
   # POST /lists.json
   def create
-    @list = List.new(list_params)
+    @list = @user.lists.new(list_params)
 
     respond_to do |format|
       if @list.save
-        format.html { redirect_to @list, notice: 'List was successfully created.' }
+        format.html { redirect_to [@user,@list], notice: 'List was successfully created.' }
         format.json { render action: 'show', status: :created, location: @list }
       else
         format.html { render action: 'new' }
@@ -42,7 +44,7 @@ class ListsController < ApplicationController
   def update
     respond_to do |format|
       if @list.update(list_params)
-        format.html { redirect_to @list, notice: 'List was successfully updated.' }
+        format.html { redirect_to [@user,@list], notice: 'List was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -56,19 +58,26 @@ class ListsController < ApplicationController
   def destroy
     @list.destroy
     respond_to do |format|
-      format.html { redirect_to lists_url }
+      format.html { redirect_to user_lists_url(@user) }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_list
-      @list = List.find(params[:id])
+  
+    def set_user
+      @user = User.find(params[:user_id])
     end
+  
+    def set_list
+      @list = @user.lists.find(params[:id])
+    end
+  
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def list_params
-      params[:list]
+      params.require(:list).permit(:book_id, :user_id, :title, :description)
     end
 end
